@@ -1,0 +1,3 @@
+Format of following command is:
+	lab1 reverse INPUT OUTPUT
+Where INPUT is an input file to reverse and OUTPUT is a file to output result

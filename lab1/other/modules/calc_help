@@ -1,0 +1,5 @@
+Format for this command is:
+	lab1 calc { sum | sub | mul | div } num1 num2
+Where sum/sub/mul/div is an arithmetical operation and num1 and num2 are valid numbers
+to perform this operation
+

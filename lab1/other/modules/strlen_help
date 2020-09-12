@@ -1,0 +1,3 @@
+Format of following command is:
+	lab1 strlen STRING
+Where string is a string to calculate its length

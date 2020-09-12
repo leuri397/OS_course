@@ -1,0 +1,7 @@
+Format of this command is:
+	lab1 { calc | search | reverse | strlen | log | exit | help } [OPTIONS]
+Where OPTIONS and result depends on the command, except log, exit and help:
+	log - outputs contents of file /var/log/anaconda/X.log
+	exit -terminates programm
+	help - show this message
+Type lab1 [COMMAND] to get help about commands
