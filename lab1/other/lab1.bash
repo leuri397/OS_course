@@ -12,7 +12,7 @@ fi
 
 function module_call { # Calling module [MODULE_NAME] [MODULE_ARGS (0-3)]
 MODULESPATH="$FILEPATH/modules/"
-result="$($MODULESPATH$1.bash $2 $3 $4 $5 $6)"
+result="$($MODULESPATH$1.bash "$2" $3 $4 $5 $6)"
 return_code=$?
 if [[ $return_code -eq 0 ]]
 then
@@ -109,8 +109,12 @@ then
 fi
 case $1 in
 calc|search|reverse|strlen|log)
-	if [[ $existing_module_list =~ ($1) ]]
-	then result="$(module_call $1 $2 $3 $4 $5 $6)"
+	if [[ $# == 1 ]] && [[ $1 != "log" ]]
+	then help $1 
+	exit -2
+	fi
+	if [[ ${existing_module_list[@]} =~ ($1) ]]
+	then result="$(module_call $1 "$2" $3 $4 $5 $6)"
 		if [[ $? -eq 0 ]]
 		then echo "$result"
 		else exit -2
