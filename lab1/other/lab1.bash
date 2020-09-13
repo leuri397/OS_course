@@ -38,6 +38,52 @@ else
 fi
 }
 
+function interactive_start {
+possible_actions=("${existing_module_list[@]}"  "help" "exit" )
+while :
+do
+echo "Choose one of the options below by typing its number or name:"
+index="0"
+	for module in ${possible_actions[@]}
+	do
+	echo "$index. $module"
+	index=$(($index + 1))
+	done
+read option
+if [[ $option =~ ^[0-9]+$ ]]
+then
+	if [[ $option -lt ${#possible_actions[@]} ]] && [[ $option -ge 0 ]]
+	then module=${possible_actions[$option]}
+	else echo "Invalid option. Try again"
+	continue
+	fi
+else
+	if [[ ${possible_actions[@]} =~ ("$option") ]]
+	then module="$option"
+	else echo "Unknown option. Try again"
+	continue
+	fi
+fi
+no_arg=( "log" "exit" "help")
+if ! [[ ${no_arg[@]} =~ ("$module") ]]
+then echo "Enter arguments"
+read arg1 arg2 arg3 arg4
+fi
+case $module in
+"exit")
+	exit 0
+	;;
+help)
+	help
+	;;
+calc|search|reverse|log)
+	echo "$(module_call $module $arg1 $arg2 $arg3 $arg4)"
+	continue
+	;;
+esac
+done
+}
+
 if ! [[ -e "$FILEPATH/modules_list" ]]
 then echo "Missing list of modules. Program is terminating">&2
 exit -1
@@ -81,7 +127,7 @@ help)
 	exit 0
 	;;
 interactive)
-	interactive $existing_module_list
+	interactive_start
 	exit $?
 	;;
 esac
