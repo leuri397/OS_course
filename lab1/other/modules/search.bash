@@ -2,7 +2,7 @@
 #Search module, implements task 2.3
 if [[ $# -eq 2 ]]
 then
-	if [[ -d "$2" ]]
+	if [ -d "$2" ]
 	then
 		result="$(grep -r "$1" "$2")"
 		if [[ $? -ne 0 ]]

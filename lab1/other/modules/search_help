@@ -1,4 +1,4 @@
 Format of this comman is:
-	lab1 search DIR REG
+	lab1 search REG DIR
 Where DIR is a directory to scan and REG is regular expression to search
 
