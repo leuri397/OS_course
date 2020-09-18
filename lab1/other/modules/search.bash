@@ -5,11 +5,6 @@ then
 	if [ -d "$2" ]
 	then
 		grep -r "$1" "$2" 2> /dev/null 1>&1
-		if [[ $? -ne 0 ]]
-		then exit 6 #in case of error of other programm return 6
-		else
-		exit 0
-		fi
 	else exit 5
 	fi
 else exit 1
