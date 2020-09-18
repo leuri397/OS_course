@@ -146,7 +146,7 @@ calc|search|reverse|strlen|log)
 	fi
 	;;
 "exit")
-	([[ $# -eq 1 ]] && exit 0 || ([[ $2 -eq "X" ]] && help "exit" || exit 0))
+	([[ $# -eq 1 ]] && exit 0 || ([[ $2 -eq "X" ]] && help "exit" || exit $2))
 	;;
 help)
 	help
