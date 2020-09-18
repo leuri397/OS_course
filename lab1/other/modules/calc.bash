@@ -3,7 +3,7 @@
 if [[ "$#" -ne 3 ]]
 then exit 1 # Exit with code 1 if argument count is not 3
 else
-if ! [[ $2 =~ ^[0-9]+$ ]] || ! [[ $3 =~ ^[0-9]+$ ]]
+if ! [[ $2 =~ ^[-]?[0-9]+$ ]] || ! [[ $3 =~ ^[-]?[0-9]+$ ]]
 then exit 2
 fi
 case $1 in
