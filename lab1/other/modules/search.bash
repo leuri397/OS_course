@@ -4,7 +4,7 @@ if [[ $# -eq 2 ]]
 then
 	if [ -d "$2" ]
 	then
-		echo "$(grep -r "$1" "$2")" 2> /dev/null
+		grep -r "$1" "$2" 2> /dev/null 1>&1
 		if [[ $? -ne 0 ]]
 		then exit 6 #in case of error of other programm return 6
 		else

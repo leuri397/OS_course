@@ -76,7 +76,7 @@ do
 			continue
 		fi
 	fi
-	no_arg=( "log" "exit" "help")
+	no_arg=( "log" "help")
 	if ! [[ ${no_arg[@]} =~ ("$module") ]]
 	then
 		echo "Enter arguments"
@@ -84,7 +84,10 @@ do
 	fi
 	case $module in
 	"exit")
-		exit 0
+		if ! [[ -z "$arg1" ]]
+		then exit $arg1
+		else exit 0
+		fi
 		;;
 	help)
 		help
