@@ -40,6 +40,9 @@ else
 	6)
 	echo "Internal comand error" >&2
 	;;
+	7)
+	echo "No permissions!" >&2
+	;;
 	esac
 	echo "$(help $1)"
 	exit 1
