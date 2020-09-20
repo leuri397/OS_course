@@ -152,7 +152,7 @@ calc|search|reverse|strlen|log)
 	fi
 	;;
 "exit")
-	([[ $# -eq 1 ]] && exit 0 || ([[ $2 == "X" ]] && help "exit" || ([[ $2 =~ ^[-]?[0-9]+$ ]] && exit $2 || echo "Bad exit argument">&2; exit -1)))
+	([[ $# -eq 1 ]] && exit 0 || ([[ $2 == "X" ]] && help "exit" || ([[ $2 =~ ^[-]?[0-9]+$ ]] && exit $2 || echo "You're fool, user">&2; exit -1)))
 	;;
 help)
 	help
