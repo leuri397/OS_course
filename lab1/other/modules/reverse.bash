@@ -1,3 +1,5 @@
+
+
 #!/bin/bash
 if [[ $# -eq 2 ]]
 	then
@@ -5,7 +7,8 @@ if [[ $# -eq 2 ]]
 		then
 		if [[ -w "$2" ]]
 		then
-		tac $1 | rev 1> $2 2> /dev/null
+		result=$(tac $1) 2> /dev/null
+		echo "$result" | rev> $2
 		if [[ $? -eq 0 ]]
 		then
 		exit 0
