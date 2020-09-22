@@ -14,11 +14,13 @@ fi
 
 function module_call { # Calling module [MODULE_NAME] [MODULE_ARGS (0-3)]
 MODULESPATH="$FILEPATH/modules/"
-result="$($MODULESPATH$1.bash "$2" $3 $4 $5 $6)"
+result="$($MODULESPATH$1.bash "$2" $3 $4 $5 $6)" 2> /dev/null
 return_code=$?
 if [[ $return_code -eq 0 ]]
 then
-	echo "$result"
+	if ! [[ -z "$result" ]]
+	then echo "$result"
+	fi
 	exit 0
 else
 	case $return_code in
@@ -141,7 +143,6 @@ calc|search|reverse|strlen|log)
 	then
 		echo "$(module_call $1 "$2" $3 $4 $5 $6)"
 		exit $?
-		fi
 	else
 		echo "Attempt to call missing module">&2
 		exit -2
