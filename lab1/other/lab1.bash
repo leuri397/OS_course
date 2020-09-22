@@ -47,7 +47,7 @@ else
 	;;
 	esac
 	echo "$(help $1)"
-	exit 1
+	exit $return_code
 fi
 }
 
