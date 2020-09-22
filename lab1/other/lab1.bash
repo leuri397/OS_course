@@ -141,7 +141,7 @@ calc|search|reverse|strlen|log)
 	fi
 	if [[ ${existing_module_list[@]} =~ ($1) ]]
 	then
-		echo "$(module_call $1 "$2" $3 $4 $5 $6)"
+		module_call $1 "$2" $3 $4 $5 $6
 		exit $?
 	else
 		echo "Attempt to call missing module">&2
@@ -159,8 +159,8 @@ interactive)
 	interactive_start
 	exit $?
 	;;
-*) 
-	echo "Unknown command \"$1\""
+*)
+	echo "Unknown command \"$1\"">&2
 	help
 	exit -1
 	;;
