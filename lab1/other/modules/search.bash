@@ -3,9 +3,9 @@
 if [[ $# -eq 2 ]]
 then
 	if [ -d "$2" ]
-	then
-		grep -r "$1" "$2" 2> /dev/null 1>&1
-	else exit 5
+		then
+		grep -r "$1" "$2" 2> /dev/null
+		else exit 5
 	fi
 else exit 1
 fi
