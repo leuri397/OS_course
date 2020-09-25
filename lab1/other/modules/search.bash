@@ -2,9 +2,9 @@
 #Search module, implements task 2.3
 if [[ $# -eq 2 ]]
 then
-	if [ -d "$2" ]
+	if [ -d "$1" ]
 		then
-		grep -r "$1" "$2" 2> /dev/null
+		grep -r "$2" "$1" 2> /dev/null
 		else exit 5
 	fi
 else exit 1
