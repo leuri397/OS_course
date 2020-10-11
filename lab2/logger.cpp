@@ -9,15 +9,21 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
-#include <stdio.h>
 
 
 int newEvent = 0;
+bool finish = false;
 
 void sighandler(int number) 
 {
 	newEvent++;
 }
+
+void terminator(int number) 
+{
+	finish = true;
+}
+
 
 struct LogObject {
 	std::string shm_name;
@@ -25,7 +31,7 @@ struct LogObject {
 	int fd;
 	void* memory;
 };
-
+std::vector<LogObject> logs;
 
 int main(int argc, char** argv) {
 	const int LAST_SIZE = 8;
@@ -37,7 +43,9 @@ int main(int argc, char** argv) {
 	int last_shm_fd, names_shm_fd;
 	int *last_shm_memory;
 	char *names_shm_memory;
-	std::vector<LogObject> logs;
+	close(0);
+	close(1);
+	close(2);
 	last_shm_fd = shm_open(lastMemory, O_CREAT | O_RDWR, 0666);
 	ftruncate(last_shm_fd, LAST_SIZE);
 	last_shm_memory = (int*)mmap(0, LAST_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, last_shm_fd, 0);
@@ -45,6 +53,7 @@ int main(int argc, char** argv) {
 	ftruncate(names_shm_fd, NAMES_SIZE);
 	names_shm_memory = (char*)mmap(0, NAMES_SIZE, PROT_READ, MAP_SHARED, names_shm_fd, 0);
 	signal(SIGUSR1, sighandler);
+	signal(SIGTERM, terminator);
 	logs.clear();
 	
 	std::string names(strcpy(lineBuffer, names_shm_memory));
@@ -75,11 +84,6 @@ int main(int argc, char** argv) {
 	{
 		int fd = open(name[i].c_str(), O_CREAT | O_TRUNC | O_APPEND | O_WRONLY);
 		chmod(name[i].c_str(), 0777);
-		if (fd <= 0)
-		{
-			perror("FILE:");
-			
-		}
 		LogObject buffer;
 		buffer.file_name = name[i];
 		buffer.fd = fd;
@@ -96,6 +100,16 @@ int main(int argc, char** argv) {
 	}
 	while(true)
 	{
+		if(finish)
+		{
+			shm_unlink("/LOG_LAST");
+			for(int i = 0; i < logs.size(); i++)
+			{
+				close(logs[i].fd);
+				shm_unlink(logs[i].shm_name.c_str());
+			}
+			return 0;
+		}
 		if (newEvent > 0)
 		{
 			int eventNumber = *last_shm_memory;
