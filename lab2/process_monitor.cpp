@@ -48,34 +48,8 @@ void sighandler(int number)
 }
 
 int main() {
-	DIR* proc_dir;
-	proc_dir = opendir("/proc");
-	if (proc_dir == NULL)
-	{
-		perror("Dir:");
-		return -1;
-	}
-	std::vector<RawProcess> raw;
 	std::vector<Process> parsed;
-	struct dirent* entry = readdir(proc_dir);
-	struct Process kernel;
-	while(entry != NULL)
-	{
-		struct RawProcess buffer;
-		std::string dirname = entry->d_name;
-		if ((dirname != ".") && (dirname != "..") && (dirname != "curproc"))
-		{
-			buffer.PID = std::stoi(dirname, 0, 10);
-			char status_buffer[256];
-			int status = open(("/proc/" + dirname + "/status").c_str(), O_RDONLY);
-			read(status, status_buffer, 512);
-			buffer.status = status_buffer;
-			buffer.status = buffer.status.substr(0, buffer.status.find('\n'));
-			close(status);
-			raw.push_back(buffer);
-		}
-		entry = readdir(proc_dir);
-	}
+	long long total_memory = 0;
 	struct kinfo_proc kp[1000] = {};
 	size_t len = sizeof(kp);
 	int mib[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL};
@@ -94,6 +68,7 @@ int main() {
 		buffer.PPID = kp[i].ki_ppid;
 		buffer.VSZ = kp[i].ki_size;
 		buffer.RSS = kp[i].ki_rssize;
+		total_memory += buffer.RSS;
 		buffer.cpu_use = (double)kp[i].ki_pctcpu/100;
 		if(buffer.start_time != "3:0:0")
 		parsed.push_back(buffer);
@@ -112,6 +87,7 @@ int main() {
 		write(1, &parsed[i].TT, 8);
 		write(1, &parsed[i].VSZ, 8);
 		write(1, &parsed[i].RSS, 8);
+		write(1, std::to_string(((double)parsed[i].RSS/(double)total_memory)*100.0).c_str(), 5);
 		write(1, parsed[i].command.c_str(), 19);
 		write(1, "\n", 1);
 		/*printf("%d\t", parsed[i].PID);
